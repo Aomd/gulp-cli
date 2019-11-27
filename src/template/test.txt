@@ -1,0 +1,8 @@
+引用css 和js 模板 请到输出目录查看结果
+
+"index.css"
+"main.css"
+
+
+"index.js"
+"main.js"
