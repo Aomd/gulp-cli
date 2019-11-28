@@ -41,6 +41,7 @@ exports.config = {
 ##使用
 
 ```bash
+npm install gulp-cli -g
 npm i 
 gulp
 ```
