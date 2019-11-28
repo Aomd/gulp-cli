@@ -36,10 +36,6 @@ exports.config = {
     cssPath:'build/css',
     jsPath:'build/js',
     template:'build/template'
-  },
-  del:{
-    cssPath:'build/css/*.css',
-    jsPath:'build/js/*.js',
   }
 }
 ```
