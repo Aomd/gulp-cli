@@ -38,7 +38,11 @@ const source = require('vinyl-source-stream');
 // buffer流
 const buffer = require('vinyl-buffer');
 
+// 处理报错导致停止
+var plumber = require('gulp-plumber');
 
+// 开启资源gzip
+var gzip = require('gulp-gzip');
 
 
 // uglify选项
@@ -56,7 +60,7 @@ var uglifyOption = {
 // 编译js
 function CompileJs(cb) {
   console.log('编译js')
-  del(config.del.jsPath)
+  del(config.dest.jsPath + '/*.js')
   del('./config/temp/*.js')
   var i = 0;
   config.src.jsPath.map(function (path) {
@@ -66,6 +70,7 @@ function CompileJs(cb) {
       debug: true
     });
     b.bundle()
+      .pipe(plumber())
       .pipe(source(`${jsName}.js`))
       .pipe(buffer())
       .pipe(babel({
@@ -84,9 +89,10 @@ function CompileJs(cb) {
 // 编译scss
 function CompileScss() {
   console.log('编译scss')
-  del(config.del.cssPath)
+  del(config.dest.cssPath + '/*.css')
   del('./config/temp/*.css')
   return src(config.src.cssPath)
+    .pipe(plumber())
     .pipe(sass())
     .pipe(autoprefixer())
     .pipe(dest('./config/temp'))
@@ -123,11 +129,30 @@ function replaceTemplateHash() {
     .pipe(dest(config.dest.template))
 }
 
+// 生成 js gzip文件
+function jsGzip() {
+  del(config.dest.jsPath + '/*.gz')
+  console.log('生成 js gzip文件')
+  return src([config.dest.jsPath + '/*.js'])
+    .pipe(gzip())
+    .pipe(dest(config.dest.jsPath))
+}
+// 生成 css gzip文件
+function cssGzip() {
+  del(config.dest.cssPath + '/*.gz')
+  console.log('生成 css gzip文件')
+  return src([config.dest.cssPath + '/*.css'])
+    .pipe(gzip())
+    .pipe(dest(config.dest.cssPath))
+}
+
 // 流程
 function jsTaskFlow() {
   CompileJs(function () {
     jsFileHash().on('end', function () {
-      replaceTemplateHash();
+      replaceTemplateHash().on('end',function(){
+        jsGzip()
+      })
     })
   });
 
@@ -137,7 +162,9 @@ function jsTaskFlow() {
 function cssTaskFlow() {
   CompileScss().on('end', function () {
     cssFileHash().on('end', function () {
-      replaceTemplateHash();
+      replaceTemplateHash().on('end',function(){
+        cssGzip();
+      })
     })
   });
 }
