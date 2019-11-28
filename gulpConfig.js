@@ -1,5 +1,10 @@
-// 配置
+# gulp-cli
+改版后的gulp集成web开发环境
 
+通过`gulpConfig.js`的配置文件即可更换hash文件到指定模板
+
+```javascript
+// 配置
 exports.config = {
   // 开启map
   sourcemaps:false,
@@ -31,3 +36,11 @@ exports.config = {
     jsPath:'build/js/*.js',
   }
 }
+```
+
+##使用
+
+```bash
+npm i 
+gulp
+```
