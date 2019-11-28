@@ -37,3 +37,10 @@ exports.config = {
   }
 }
 ```
+
+##使用
+
+```bash
+npm i 
+gulp
+```
