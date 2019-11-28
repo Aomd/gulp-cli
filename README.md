@@ -1,6 +1,12 @@
 # gulp-cli
 改版后的gulp集成web开发环境
 
+### 应用场景
+1. 多页面多文件入口
+2. 前后端不分离
+3. 前端采用第三方加载配置文件
+
+
 通过`gulpConfig.js`的配置文件即可更换hash文件到指定模板
 
 ```javascript
@@ -38,7 +44,7 @@ exports.config = {
 }
 ```
 
-##使用
+## 使用
 
 ```bash
 npm install gulp-cli -g
